@@ -1,0 +1,76 @@
+/* Estilo para la barra de navegación */
+.navbar {
+    background-color: rgba(240, 237, 237, 0.7); /* Gris transparente */
+    color: black !important; /* Texto negro */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Asegura que los enlaces sean de color negro */
+.navbar a {
+    color: black !important; /* Color negro para los enlaces */
+}
+
+/* Ajuste de los elementos desplegables (dropdowns) */
+.dropdown-menu {
+    background-color: rgba(250, 250, 235, 0.9); /* Fondo beige con transparencia */
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    color: black !important; /* Texto negro */
+}
+
+.nav-link {
+    color: black !important; /* Texto negro */
+}
+
+/* Asegura que el contenido no se quede detrás del navbar */
+body {
+    padding-top: 65px; /* Ajustar dependiendo de la altura de tu navbar */
+}
+
+
+
+/* Estilo del contenedor del logo */
+.logo-container {
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+}
+
+/* Estilo del icono de tareas */
+.task-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 10px; /* Espacio entre el icono y el texto */
+}
+
+/* Estilo de la casilla de verificación */
+.checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #4a90e2; /* Color de la casilla */
+    background-color: #fff; /* Color de fondo */
+    border-radius: 3px; /* Bordes redondeados */
+}
+
+/* Líneas que representan tareas */
+.line {
+    width: 100%;
+    height: 4px;
+    background-color: #4a90e2; /* Color de las líneas */
+    margin: 2px 0; /* Espacio entre las líneas */
+}
+
+/* Estilo del texto del logo */
+.logo-text {
+    font-size: 24px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    color: #333; /* Color del texto */
+}
+
