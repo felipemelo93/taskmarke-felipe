@@ -105,9 +105,7 @@ const Menu = ({ userInfo }) => {
                                 </ul>
                             )}
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/Reportes">Reportes</Link>
-                        </li>
+                        
                     </ul>
 
                     <ul className="navbar-nav ms-auto" style={{ display: "flex", alignItems: "center" }}>
