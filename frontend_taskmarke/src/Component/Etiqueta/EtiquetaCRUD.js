@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import EtiquetaList from './EtiquetaList';
 import EtiquetaForm from './EtiquetaForm';
 import axios from 'axios';
@@ -8,38 +8,38 @@ const EtiquetaCRUD = ({ token }) => {
   const [etiquetas, setEtiquetas] = useState([]);
   const [currentEtiqueta, setCurrentEtiqueta] = useState(null);
   const [error, setError] = useState(null);
-  const [userInfo, setUserInfo] = useState(null); // Estado para almacenar los datos del usuario
+  const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const API_URL = 'http://127.0.0.1:8000/authentification/current-user/';
 
-  const fetchEtiquetas = async () => {
+  const fetchEtiquetas = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:8000/api/etiquetas/', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('Etiquetas recibidas:', response.data); // Verificar respuesta
+      console.log('Etiquetas recibidas:', response.data);
       setEtiquetas(response.data);
     } catch (err) {
       setError(err.response ? err.response.data.detail || 'Error al obtener las etiquetas' : 'Error al obtener las etiquetas');
       console.error('Error fetching etiquetas:', err);
     }
-  };
+  }, [token]);
 
-  const fetchUserInfo = async () => {
+  const fetchUserInfo = useCallback(async () => {
     try {
       const response = await axios.get(API_URL, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setUserInfo(response.data); // Guardar los datos del usuario
+      setUserInfo(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching user info:', error);
       setLoading(false);
     }
-  };
+  }, [token]);
 
   const handleEdit = (etiqueta) => {
     setCurrentEtiqueta(etiqueta);
@@ -62,15 +62,14 @@ const EtiquetaCRUD = ({ token }) => {
   useEffect(() => {
     fetchEtiquetas();
     fetchUserInfo();
-  }, []);
+  }, [fetchEtiquetas, fetchUserInfo]);
 
   if (loading) {
-    return <div>Cargando...</div>; // Mostrar pantalla de carga mientras se obtienen los datos del usuario
+    return <div>Cargando...</div>;
   }
 
   return (
     <div className="bg-while text-dark min-vh-100">
-      {/* Barra de menú con los datos del usuario */}
       <Menu userInfo={userInfo} />
 
       <div className="mt-5 mx-3 mb-4 text-center">

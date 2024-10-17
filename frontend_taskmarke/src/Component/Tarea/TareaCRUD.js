@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import TareaList from './TareaList';
 import TareaForm from './TareaForm';
@@ -17,12 +17,8 @@ const TareaCRUD = ({ token }) => {
     const [prioridadFilter, setPrioridadFilter] = useState('');
     const [sortOrder, setSortOrder] = useState({ field: '', direction: 'asc' });
 
-    useEffect(() => {
-        fetchTareas();
-        fetchUserInfo();
-    }, []);
-
-    const fetchTareas = async () => {
+    // Encapsular fetchTareas en useCallback
+    const fetchTareas = useCallback(async () => {
         try {
             const response = await axios.get('http://127.0.0.1:8000/api/tareas/', {
                 headers: { Authorization: `Bearer ${token}` }
@@ -32,20 +28,33 @@ const TareaCRUD = ({ token }) => {
             setError('Error al obtener las tareas');
             console.error('Error fetching tareas:', err);
         }
-    };
+    }, [token]);
 
-    const fetchUserInfo = async () => {
+    // Encapsular fetchUserInfo en useCallback
+    const fetchUserInfo = useCallback(async () => {
         try {
             const response = await axios.get(API_URL, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUserInfo(response.data);
-            setLoading(false);
         } catch (error) {
             console.error('Error fetching user info:', error);
-            setLoading(false);
         }
-    };
+    }, [token]);
+
+    // Usar useEffect para llamar a ambas funciones encapsuladas
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                await Promise.all([fetchTareas(), fetchUserInfo()]);
+            } catch (error) {
+                console.error('Error fetching initial data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUserData();
+    }, [fetchTareas, fetchUserInfo]);
 
     const handleCreate = async (newTarea) => {
         try {

@@ -5,7 +5,6 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import KanbanBoard from './KanbanBoard';
 
-
 const Dashboard = ({ token }) => {
     const [userInfo, setUserInfo] = useState(null);
     const navigate = useNavigate();
@@ -21,10 +20,11 @@ const Dashboard = ({ token }) => {
                 console.log(response.data);
             } catch (error) {
                 console.error('Error fetching user info:', error);
+                navigate('/login'); // Redirige a la página de inicio de sesión en caso de error
             }
         };
         fetchUserInfo();
-    }, [token]);
+    }, [token, navigate]);
 
     if (!userInfo) {
         return <div>Cargando información del usuario...</div>;
@@ -34,8 +34,6 @@ const Dashboard = ({ token }) => {
         <div className="bg-white text-dark min-vh-100">
             <Menu userInfo={userInfo} />
             <div className="container mt-4">
-               
-                
                 <KanbanBoard token={token} />
             </div>
         </div>
