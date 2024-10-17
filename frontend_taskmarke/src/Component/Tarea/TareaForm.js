@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 
@@ -14,18 +14,8 @@ const TareaForm = ({ onCreate, onUpdate, tareaExistente, token }) => {
 
     const [etiquetasDisponibles, setEtiquetasDisponibles] = useState([]);
 
-    useEffect(() => {
-        if (tareaExistente) {
-            const etiquetasMapeadas = tareaExistente.etiquetas.map(etiqueta => ({
-                value: etiqueta.id,
-                label: etiqueta.name
-            }));
-            setTarea({ ...tareaExistente, etiquetas_ids: etiquetasMapeadas });
-        }
-        fetchEtiquetas();
-    }, [tareaExistente]);
-
-    const fetchEtiquetas = async () => {
+    // Usar useCallback para que la función no cambie en cada renderizado
+    const fetchEtiquetas = useCallback(async () => {
         try {
             const response = await axios.get('http://127.0.0.1:8000/api/etiquetas/', {
                 headers: { Authorization: `Bearer ${token}` }
@@ -38,24 +28,34 @@ const TareaForm = ({ onCreate, onUpdate, tareaExistente, token }) => {
         } catch (err) {
             console.error('Error fetching etiquetas:', err);
         }
-    };
+    }, [token]);
+
+    useEffect(() => {
+        if (tareaExistente) {
+            const etiquetasMapeadas = tareaExistente.etiquetas.map(etiqueta => ({
+                value: etiqueta.id,
+                label: etiqueta.name
+            }));
+            setTarea({ ...tareaExistente, etiquetas_ids: etiquetasMapeadas });
+        }
+        fetchEtiquetas();
+    }, [tareaExistente, fetchEtiquetas]); // Ahora fetchEtiquetas es una dependencia estable
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
-        // Modificar aquí para que el nombre esté en mayúsculas y la descripción en formato correcto
+
         if (name === 'name') {
-            setTarea({ ...tarea, [name]: value.toUpperCase() }); // Asegura que el nombre esté en mayúsculas
+            setTarea({ ...tarea, [name]: value.toUpperCase() });
         } else if (name === 'description') {
-            setTarea({ ...tarea, [name]: formatDescription(value) }); // Formatea la descripción
+            setTarea({ ...tarea, [name]: formatDescription(value) });
         } else {
             setTarea({ ...tarea, [name]: value });
         }
     };
 
     const formatDescription = (desc) => {
-        if (desc.length === 0) return ''; // Si la descripción está vacía, retorna vacío
-        return desc.charAt(0).toUpperCase() + desc.slice(1).toLowerCase(); // Primer carácter en mayúscula, resto en minúsculas
+        if (desc.length === 0) return '';
+        return desc.charAt(0).toUpperCase() + desc.slice(1).toLowerCase();
     };
 
     const handleEtiquetasChange = (selectedOptions) => {
