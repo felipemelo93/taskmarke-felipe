@@ -16,7 +16,7 @@ const UserProfile = () => {
   });
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
-  
+
   const API_URL = 'http://127.0.0.1:8000/authentification/current-user/';
 
   // Obtener datos del usuario logueado
@@ -57,7 +57,7 @@ const UserProfile = () => {
         apellido: userData.apellido,
       };
 
-      const response = await axios.put(`http://127.0.0.1:8000/authentification/users/${userData.id}/update/`, updatedData, {
+      await axios.put(`http://127.0.0.1:8000/authentification/users/${userData.id}/update/`, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

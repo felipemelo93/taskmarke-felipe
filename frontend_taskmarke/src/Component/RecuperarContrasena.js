@@ -8,7 +8,8 @@ const RecuperarContrasena = () => {
 
   const manejarRecuperacion = async () => {
     try {
-      const respuesta = await axios.post('http://127.0.0.1:8000/authentification/password-reset/', { correo });
+      // Eliminamos la variable 'respuesta' ya que no se utiliza
+      await axios.post('http://127.0.0.1:8000/authentification/password-reset/', { correo });
       setMensaje('Se ha enviado un enlace de recuperación a tu correo.');
       setErrores('');
     } catch (error) {

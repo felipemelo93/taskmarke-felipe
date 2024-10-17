@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom'; // Elimina useNavigate
 import axios from 'axios';
- 
+
 const PasswordResetConfirm = () => {
   const { uidb64, token } = useParams();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
- 
+  // const navigate = useNavigate(); // Elimina esta línea
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
@@ -16,27 +16,23 @@ const PasswordResetConfirm = () => {
       return;
     }
     try {
- 
-      console.log(uidb64, token)
+      console.log(uidb64, token);
       const response = await axios.post(`http://127.0.0.1:8000/authentification/password-reset-confirm/${uidb64}/${token}/`, {
         new_password: newPassword,
         confirm_password: confirmPassword,
       }, {
         headers: {
-          'Content-Type': 'application/json',  // Asegurarse de enviar JSON
+          'Content-Type': 'application/json',
         }
-      }
-    );
-      console.log(response)
- 
-      setMessage('Contraseña restablecida con éxito.'+response.data);
-      //navigate('/password-reset-complete');
+      });
+
+      setMessage('Contraseña restablecida con éxito. ' + (response.data.message || ''));
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setMessage('El enlace de restablecimiento es inválido o ha expirado.');
     }
   };
- 
+
   return (
     <div>
       <h2>Restablecer Contraseña</h2>
@@ -61,5 +57,5 @@ const PasswordResetConfirm = () => {
     </div>
   );
 };
- 
+
 export default PasswordResetConfirm;
