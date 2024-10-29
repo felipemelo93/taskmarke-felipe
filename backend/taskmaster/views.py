@@ -10,6 +10,9 @@ class TareaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
+    def get_queryset(self):
+        return Tarea.objects.filter(user=self.request.user)
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
@@ -18,3 +21,6 @@ class EtiquetaViewSet(viewsets.ModelViewSet):
     serializer_class = EtiquetaSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

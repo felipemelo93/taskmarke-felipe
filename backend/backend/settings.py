@@ -37,7 +37,6 @@ INSTALLED_APPS = [
 ]
 #variable de configuracion
 
-
 AUTH_USER_MODEL = 'authentification.User'
 
 MIDDLEWARE = [
@@ -51,7 +50,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 # codigo nuevo
-
 
 MIDDLEWARE.remove('django.middleware.csrf.CsrfViewMiddleware') #Evitar problemas con Csrf de django
 

@@ -2,6 +2,7 @@ from django.db import models
 from authentification.models import User
 
 class Etiqueta(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
 
     def __str__(self):

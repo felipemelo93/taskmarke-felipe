@@ -5,6 +5,7 @@ class EtiquetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Etiqueta
         fields = ['id', 'name']
+        read_only_fields = ['user']
 
 class TareaSerializer(serializers.ModelSerializer):
     etiquetas = EtiquetaSerializer(many=True, read_only=True)  # Mostrar etiquetas con detalles completos en la respuesta
